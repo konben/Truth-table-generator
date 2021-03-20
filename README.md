@@ -2,6 +2,6 @@
 A truth table generator for the command line.
 
 Build Tools:
-  make
-  gcc
+  make,
+  gcc,
   flex & yacc
