@@ -21,13 +21,14 @@ $(OBJ_DIR)/parser.tab.o: $(SRC_DIR)/parser.tab.c
 	gcc -c -o $(OBJ_DIR)/parser.tab.o $(SRC_DIR)/parser.tab.c $(FLAGS)
 
 $(SRC_DIR)/lex.yy.c: lexer.l
+	mkdir $(SRC_DIR) $(OBJ_DIR) $(BIN_DIR)
 	$(LEX) lexer.l
-	mv lex.yy.c $(SRC_DIR)
+	mv lex.yy.c $(SRC_DIR)/
 
 $(SRC_DIR)/parser.tab.c $(INC_DIR)/parser.tab.h: parser.y
 	$(YACC) -d parser.y
-	mv parser.tab.h $(INC_DIR)
-	mv parser.tab.c $(SRC_DIR)
+	mv parser.tab.h $(INC_DIR)/
+	mv parser.tab.c $(SRC_DIR)/
 
 .PHONY: clean
 
