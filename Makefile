@@ -1,24 +1,37 @@
-LEX = flex
-YACC = bison
+# File structure.
+INC_DIR := ./inc
+SRC_DIR := ./src
+OBJ_DIR := ./obj
+BIN_DIR := ./bin
 
-CC = gcc
+# Compilers n' stuff.
+LEX := flex
+YACC := bison
 
-tt_generator: lex.yy.o parser.tab.o
-	$(CC) -o tt_generator parser.tab.o lex.yy.o -ll
+FLAGS := -I$(INC_DIR)
+CC := gcc
 
-lex.yy.o: lex.yy.c parser.tab.h
-	gcc -c -o lex.yy.o lex.yy.c
+$(BIN_DIR)/tt_generator: $(OBJ_DIR)/lex.yy.o $(OBJ_DIR)/parser.tab.o
+	$(CC) -o $(BIN_DIR)/tt_generator $(OBJ_DIR)/parser.tab.o $(OBJ_DIR)/lex.yy.o -ll
 
-parser.tab.o: parser.tab.c
-	gcc -c -o parser.tab.o parser.tab.c
+$(OBJ_DIR)/lex.yy.o: $(SRC_DIR)/lex.yy.c $(INC_DIR)/parser.tab.h
+	gcc -c -o $(OBJ_DIR)/lex.yy.o $(SRC_DIR)/lex.yy.c $(FLAGS)
 
-lex.yy.c: lexer.l
+$(OBJ_DIR)/parser.tab.o: $(SRC_DIR)/parser.tab.c
+	gcc -c -o $(OBJ_DIR)/parser.tab.o $(SRC_DIR)/parser.tab.c $(FLAGS)
+
+$(SRC_DIR)/lex.yy.c: lexer.l
 	$(LEX) lexer.l
+	mv lex.yy.c $(SRC_DIR)
 
-parser.tab.c parser.tab.h: parser.y
+$(SRC_DIR)/parser.tab.c $(INC_DIR)/parser.tab.h: parser.y
 	$(YACC) -d parser.y
+	mv parser.tab.h $(INC_DIR)
+	mv parser.tab.c $(SRC_DIR)
 
 .PHONY: clean
 
 clean:
-	rm parser.tab.* lex.yy.* tt_generator
+	rm $(INC_DIR)/parser.tab.h $(SRC_DIR)/parser.tab.c $(SRC_DIR)/lex.yy.c
+	rm $(OBJ_DIR)/* $(BIN_DIR)/*
+
