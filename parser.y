@@ -1,4 +1,9 @@
 %{
+/* tt_generator is a truth table generator for the command line.
+ *
+ * Author: Benedict Konhäuser
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
